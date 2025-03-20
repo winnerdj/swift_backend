@@ -1,0 +1,113 @@
+const fs = require('fs');
+const path = require('path');
+const moment = require('moment');
+const basename = path.basename(__filename);
+const Sequelize = require('sequelize');
+
+const { swiftDbConfig } = require('../../config/config');
+
+const sequelize = new Sequelize({
+	...swiftDbConfig,
+	// logging: false
+	logging: function(str) {
+		console.log(`Swift MySQL ${moment().format('YY-MM-DD_HH:mm:ss')}: ${str}`);
+	}
+});
+
+let db = {};
+
+fs.readdirSync(__dirname)
+	.filter(file => {
+		return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+	})
+	.forEach(file => {
+		let model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+		db[model.name] = model;
+	});
+
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+/** Associations **/
+
+// bas_role -> bas_user (One-to-Many)
+db.bas_role.hasMany(db.bas_user, {
+	foreignKey: 'user_role',
+	as: 'users'
+});
+db.bas_user.belongsTo(db.bas_role, {
+	foreignKey: 'user_role',
+	as: 'role'
+});
+
+// bas_role -> bas_role_access (One-to-Many)
+db.bas_role.hasMany(db.bas_role_access, {
+	foreignKey: 'role_id',
+	as: 'roleAccess'
+});
+db.bas_role_access.belongsTo(db.bas_role, {
+	foreignKey: 'role_id',
+	as: 'role'
+});
+
+// bas_quick_code -> bas_role_access (One-to-Many, module_id references qc_id)
+db.bas_quick_code.hasMany(db.bas_role_access, {	
+	foreignKey: 'module_id',
+	as: 'roleAccessModules'
+});
+db.bas_role_access.belongsTo(db.bas_quick_code, {
+	foreignKey: 'module_id',
+	as: 'module'
+});
+
+// bas_user -> bas_user_location (One-to-Many)
+db.bas_user.hasMany(db.bas_user_location, {
+	foreignKey: 'user_id',
+	as: 'locations'
+});
+db.bas_user_location.belongsTo(db.bas_user, {
+	foreignKey: 'user_id',
+	as: 'user'
+});
+
+// bas_quick_code -> bas_user_location (One-to-Many, user_location references qc_id)
+db.bas_quick_code.hasMany(db.bas_user_location, {
+	foreignKey: 'user_location',
+	as: 'userLocations'
+});
+db.bas_user_location.belongsTo(db.bas_quick_code, {
+	foreignKey: 'user_location',
+	as: 'location'
+});
+
+// bas_quick_code -> bas_service (One-to-Many, service_location references qc_id)
+db.bas_quick_code.hasMany(db.bas_service, {
+	foreignKey: 'service_location',
+	as: 'services'
+});
+db.bas_service.belongsTo(db.bas_quick_code, {
+	foreignKey: 'service_location',
+	as: 'location'
+});
+
+// bas_service -> doc_ticket_transaction_log (One-to-Many)
+db.bas_service.hasMany(db.doc_ticket_transaction_log, {
+	foreignKey: 'ticket_service',
+	as: 'tickets'
+});
+db.doc_ticket_transaction_log.belongsTo(db.bas_service, {
+	foreignKey: 'ticket_service',
+	as: 'service'
+});
+
+// bas_user -> doc_ticket_transaction_log (One-to-Many, ticket_support references user_id)
+db.bas_user.hasMany(db.doc_ticket_transaction_log, {
+	foreignKey: 'ticket_support',
+	as: 'supportedTickets'
+});
+db.doc_ticket_transaction_log.belongsTo(db.bas_user, {
+	foreignKey: 'ticket_support',
+	as: 'supportUser'
+});
+
+module.exports = db;

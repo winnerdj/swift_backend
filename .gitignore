@@ -1,0 +1,12 @@
+node_modules
+.env
+*ecosystem.config.js
+
+combined.outerr-0.log
+error-0.log
+out-0.log
+
+nginx.conf
+
+logs/*
+temp/*
