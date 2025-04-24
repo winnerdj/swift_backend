@@ -40,10 +40,10 @@ router.use(async(req, res, next) => {
 		let redisClient = Redis.createClient(redisConfig);
 		await redisClient.connect();
 
-		let redisRes = await redisClient.json.get(`mesi:session:${user_id}`)
+		let redisRes = await redisClient.json.get(`swift:session:${user_id}`)
 
 		if(redisRes === null) { throw new Error(`Invalid Access Token session for: ${user_id}`) }
-		if(redisRes.x_access_token !== token) { throw new Error('The current session token does not align with the latest login. Please log in to generate a new token.') }
+		if(redisRes['x-access-token'] !== token) { throw new Error('The current session token does not align with the latest login. Please log in to generate a new token.') }
 
 		req.processor = decode
 
