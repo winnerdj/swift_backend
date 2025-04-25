@@ -16,126 +16,57 @@ exports.createRole = async({
 	}
 }
 
-const formatFilters = ({
-	model,
-	filters
-}) => {
+const formatFilters = ({ model, filters }) => {
 	try {
-		let formattedFilters;
-		if(filters.search && filters.search !== '') {
+		let formattedFilters = {};
+
+		if(filters.searchTerm && filters.searchTerm !== "") {
+			let headers = Object.keys(model).filter(
+				(h) => !["createdAt", "updatedAt"].includes(h)
+			);
+
+			// Properly format Op.or conditions
 			formattedFilters = {
-				[Sequelize.Op.or]: [
-					{
-						role_email: {
-							[Sequelize.Op.like]: `%${filters.search}%`
-						}
-					},
-					{
-						role_first_name: {
-							[Sequelize.Op.like]: `%${filters.search}%`
-						}
-					},
-					{
-						role_last_name: {
-							[Sequelize.Op.like]: `%${filters.search}%`
-						}
-					},
-					{
-						role_contact_no: {
-							[Sequelize.Op.like]: `%${filters.search}%`
-						}
-					},
-					{
-						role_remarks1: {
-							[Sequelize.Op.like]: `%${filters.search}%`
-						}
-					}
-				]
+				[Sequelize.Op.or]: headers.map((field) => ({
+					[field]: { [Sequelize.Op.like]: `%${filters.searchTerm}%` },
+				})),
 			};
-		}
-		else {
+		} else {
+			delete filters.searchTerm;
 			formattedFilters = filters;
-			const attributes = Object.keys(model).filter(h => !['createdAt','updatedAt'].includes(h))
-			Object.keys(filters).map(field => {
-				if(field==='search'){
-					let fields = {}
-					attributes.map(item => (fields[item] = filters.search))
-					formattedFilters={
-						...formattedFilters,
-						[Sequelize.Op.or]:fields
-					}
-
-					delete formattedFilters["search"]
-				}
-			})
 		}
 
-		return formattedFilters
+		return formattedFilters;
+	} catch (e) {
+		throw e;
 	}
-	catch(e) {
-		throw e
-	}
-}
+};
 
 exports.getPaginatedRole = async({
 	filters,
 	orderBy,
-	page,
-	totalPage
+	pageIndex,
+	pageSize
 }) => {
 	try {
 		let newFilter = formatFilters({
-			model:models.role_tbl.rawAttributes,
+			model:models.bas_role.rawAttributes,
 			filters
 		});
 
-		const {count,rows} = await models.role_tbl.findAndCountAll({
+		const { count, rows } = await models.bas_role.findAndCountAll({
 			where:{
 				...newFilter
 			},
-			offset	:parseInt(page) * parseInt(totalPage),
-			limit	:parseInt(totalPage),
-			include:[
-				{
-					model:models.role_hdr_tbl,
-					attributes:['role_name'],
-					as:'role'
-				},
-				{
-					model:models.reason_code_tbl,
-					attributes:['rc_id','rc_desc'],
-					as:'role_position_fk'
-				},
-				{
-					model:models.reason_code_tbl,
-					attributes:['rc_id','rc_desc'],
-					as:'role_whLocation_fk'
-				},
-				{
-					model:models.role_tbl,
-					attributes:['role_email'],
-					as:'creator',
-					required:false
-				},
-				{
-					model:models.role_tbl,
-					attributes:['role_email'],
-					as:'modifier',
-					required:false
-				}
-			]
+			offset	: parseInt(pageIndex) * parseInt(pageSize),
+			limit	: parseInt(pageSize)
+			,order	: [orderBy]
 		})
 		.then(result => {
 			let {count,rows} = JSON.parse(JSON.stringify(result))
 
 			return {
-				rows: rows.map(item => {
-					const {role,...roles} = item
-					return {
-						...roles,
-						role_name:role?.role_name
-					}
-				}),
+				rows,
 				count
 			}
 		})
@@ -161,6 +92,28 @@ exports.getDropdownRole = async({
 			attributes:['role_name','role_id']
 		})
 		.then(result => JSON.parse(JSON.stringify(result)))
+	}
+	catch(e) {
+		throw e
+	}
+}
+
+exports.updateRole = async({
+	filters,
+	data,
+	options
+}) => {
+	try {
+		return await models.bas_role.update(
+			{
+				...data
+			},
+			{
+				where:{
+					...filters
+				}
+			}
+		).then(result => JSON.parse(JSON.stringify(result)))
 	}
 	catch(e) {
 		throw e

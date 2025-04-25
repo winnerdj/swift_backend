@@ -17,7 +17,7 @@ const userCreateSchema = Joi.object({
 	// user_password: passwordComplexity(complexityOptions), //Joi.string().max(255),
 	user_status: Joi.alternatives().try(Joi.boolean(), Joi.number().valid(0, 1), Joi.string().valid).default(true),
 	user_email: Joi.string().email().max(255),
-	user_name: Joi.string().max(50).required(),
+	user_name: Joi.string().trim().max(50).required(),
 	user_first_name: Joi.string().max(255),
 	user_middle_name: Joi.string().max(255),
 	user_last_name: Joi.string().max(255),
@@ -69,16 +69,16 @@ const userUpdateSchema = Joi.object({
 
 const validateUpdateUserSchema = async (req, res, next) => {
 	try {
-		console.log('req.body:', req.body);
 		let dataToValidate = req?.body;
 
-		if (typeof dataToValidate !== 'object' || !dataToValidate) {
+		if(typeof dataToValidate !== 'object' || !dataToValidate) {
 			throw new Error(`Payload invalid.`);
 		}
 
-		dataToValidate.user_id = dataToValidate?.user_name;
-
-		const { value, error } = userUpdateSchema.validate(dataToValidate);
+		const { value, error } = userUpdateSchema.validate({
+			...dataToValidate
+			,user_id: dataToValidate?.user_name
+		});
 
 		if (error) throw new Error(error);
 

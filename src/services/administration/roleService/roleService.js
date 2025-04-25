@@ -21,12 +21,14 @@ exports.getPaginatedRole = async({
 	filters
 }) => {
 	try {
-		let { orderBy, page, totalPage, ...newFilters } = filters
+		let { order, pageIndex, pageSize, ...newFilters } = filters;
+
+		order = order ? order : 'updatedAt,DESC';
 
 		return await dataLayer.getPaginatedRole({
-			orderBy:orderBy.split(','),
-			page,
-			totalPage,
+			orderBy:order.split(','),
+			pageIndex,
+			pageSize,
 			filters:{
 				...newFilters
 			}

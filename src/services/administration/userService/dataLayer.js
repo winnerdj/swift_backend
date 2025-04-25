@@ -28,7 +28,7 @@ const formatFilters = ({ model, filters }) => {
 	} catch (e) {
 		throw e;
 	}
-};
+}
 
 exports.createUser = async({
 	...data

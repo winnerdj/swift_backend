@@ -5,12 +5,11 @@ const { roleService } = require('../../services/administration');
 
 exports.createRole = async(req, res, next) => {
 	try {
-		const { data } = req.body;
+		const data = req.body;
 		const processor = req.processor;
 
 		await roleService.createRole({
 			...data,
-			password: data?.user_password ?? 'kerrylogistikus',
 			createdBy: processor?.user_id ?? data?.createdBy
 		})
 
@@ -28,11 +27,11 @@ exports.createRole = async(req, res, next) => {
 
 exports.updateRole = async(req, res, next) => {
 	try {
-		const { data } = req.body;
+		const data = req.body;
 		const processor = req.processor;
 
-		await userService.updateUser({
-			'filters': { user_id: data?.user_id },
+		await roleService.updateRole({
+			'filters': { role_id: data?.role_name.toLowerCase().replace(/\s+/g, '_') },
 			'data': {
 				...data,
 				createdBy: processor?.user_id ?? data.createdBy
@@ -42,7 +41,7 @@ exports.updateRole = async(req, res, next) => {
 		res.status(200).json({
 			success: true,
 			code: '000',
-			message: "User updated successfully."
+			message: "Role updated successfully."
 		})
 	}
 	catch(err) {
@@ -58,6 +57,24 @@ exports.getDropdownRole = async(req, res, next) => {
 		let result = await roleService.getDropdownRole({ filters })
 
 		res.status(200).json({ result })
+	}
+	catch(err) {
+		err.statusCode = 500;
+		next(err)
+	}
+}
+
+exports.getPaginatedRole = async(req, res, next) => {
+	try {
+		const filters = req.query;
+
+		let { rows, count } = await roleService.getPaginatedRole({ filters })
+
+		let pageCount = Math.ceil(count / filters.pageSize)
+
+		res.status(200).json({
+			rows, count, pageCount
+		})
 	}
 	catch(err) {
 		err.statusCode = 500;
