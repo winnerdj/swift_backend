@@ -4,13 +4,13 @@ const roleCreateSchema = Joi.object({
 	//role_id: Joi.string().trim().replace(/\s+/g, '_').max(50), // Define role_id in the schema
 	role_name: Joi.string().trim().max(50).required(),
 	role_status: Joi.alternatives().try(Joi.boolean(), Joi.number().valid(0, 1), Joi.string().valid).default(true),
-	role_name: Joi.string().max(50).required(),
-	role_description: Joi.string().max(255),
-	role_remarks1: Joi.string().allow(null).max(255),
-	role_remarks2: Joi.string().allow(null).max(255),
-	role_remarks3: Joi.string().allow(null).max(255),
-	createdBy: Joi.string().max(255),
-	updatedBy: Joi.string().max(255),
+	role_name: Joi.string().trim().max(50).empty('').default(null),
+	role_description: Joi.string().trim().max(255).empty('').default(null),
+	role_remarks1: Joi.string().trim().max(255).empty('').default(null),
+	role_remarks2: Joi.string().trim().max(255).empty('').default(null),
+	role_remarks3: Joi.string().trim().max(255).empty('').default(null),
+	createdBy: Joi.string().trim().max(255).empty('').default(null),
+	updatedBy: Joi.string().trim().max(255).empty('').default(null),
 }).unknown(true);
 
 const validateCreateRoleSchema = async (req, res, next) => {
@@ -39,12 +39,12 @@ const validateCreateRoleSchema = async (req, res, next) => {
 
 const roleUpdateSchema = Joi.object({
 	role_status: Joi.alternatives().try(Joi.boolean(), Joi.number().valid(0, 1), Joi.string().valid),
-	role_name: Joi.string().max(50).required(),
-	role_description: Joi.string().max(255),
-	role_remarks1: Joi.string().allow(null).max(255),
-	role_remarks2: Joi.string().allow(null).max(255),
-	role_remarks3: Joi.string().allow(null).max(255),
-	updatedBy: Joi.string().max(255),
+	role_name: Joi.string().trim().max(50).required(),
+	role_description: Joi.string().trim().max(255).empty('').default(null),
+	role_remarks1: Joi.string().trim().max(255).empty('').default(null),
+	role_remarks2: Joi.string().trim().max(255).empty('').default(null),
+	role_remarks3: Joi.string().trim().max(255).empty('').default(null),
+	updatedBy: Joi.string().trim().max(255).empty('').default(null),
 }).unknown(true);
 
 const validateUpdateRoleSchema = async (req, res, next) => {
@@ -55,11 +55,9 @@ const validateUpdateRoleSchema = async (req, res, next) => {
 			throw new Error(`Payload invalid.`);
 		}
 
-		dataToValidate.role_id = dataToValidate?.role_name;
-
 		const { value, error } = roleUpdateSchema.validate(dataToValidate);
 
-		if (error) throw new Error(error);
+		if(error) throw new Error(error);
 
 		req.body = value;
 

@@ -30,11 +30,13 @@ exports.updateRole = async(req, res, next) => {
 		const data = req.body;
 		const processor = req.processor;
 
+		const role_id = data?.role_name.toLowerCase().replace(/\s+/g, '_')
+
 		await roleService.updateRole({
-			'filters': { role_id: data?.role_name.toLowerCase().replace(/\s+/g, '_') },
+			'filters': { role_id },
 			'data': {
 				...data,
-				createdBy: processor?.user_id ?? data.createdBy
+				updatedBy: processor?.user_id ?? data.updatedBy
 			}
 		})
 

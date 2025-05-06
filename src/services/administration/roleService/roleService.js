@@ -71,14 +71,9 @@ exports.updateRole = async({
 	data
 }) => {
 	try {
-		const user_password = data.user_new_password ? bcrypt.hashSync(data.user_new_password, 10) : undefined;
-
 		return await dataLayer.updateRole({
 			filters,
-			'data' : {
-				...data,
-				user_password
-			}
+			data
 		})
 	}
 	catch(e) {

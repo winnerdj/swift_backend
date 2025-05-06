@@ -1,8 +1,11 @@
 "use strict";
 
 const router = require('express').Router();
-const { createQuickCode } = require('../controllers/quickCode.controller');
+const { createQuickcode, updateQuickcode, getPaginatedQuickcode } = require('../controllers/quickcode.controller');
+const { validateCreateQuickcodeSchema, validateUpdateQuickcodeSchema } = require('../schema/quickcode.schema');
 
-router.post('/', createQuickCode);
+router.get('/', getPaginatedQuickcode);
+router.post('/', validateCreateQuickcodeSchema, createQuickcode);
+router.put('/', validateUpdateQuickcodeSchema, updateQuickcode);
 
 module.exports = router;
