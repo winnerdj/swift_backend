@@ -30,16 +30,17 @@ exports.updateQuickcode = async(req, res, next) => {
 		const data = req.body;
 		const processor = req.processor;
 
-		/** Convert qc_type and qc_code to qc_id */
-		const qc_id = data?.qc_type.toLowerCase().trim().replace(/\s+/g, '_').concat('@',data?.qc_code.toLowerCase().trim().replace(/\s+/g, '_'));
+		const qc_id = data?.qc_id;
 
-		await quickcodeService.updateQuickcode({
+		let numOfUpdatedLines = await quickcodeService.updateQuickcode({
 			'filters': { qc_id },
 			'data': {
 				...data,
 				updatedBy: processor?.user_id ?? data.updatedBy
 			}
 		})
+
+		if(numOfUpdatedLines[0] !== 1) throw new Error(`No Quickcode has been updated.`);
 
 		res.status(200).json({
 			success: true,

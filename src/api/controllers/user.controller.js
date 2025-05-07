@@ -37,13 +37,17 @@ exports.updateUser = async(req, res, next) => {
 		const data = req.body;
 		const processor = req.processor;
 
-		await userService.updateUser({
-			'filters': { user_id: data?.user_id },
+		const user_id = data?.user_id;
+
+		let numOfUpdatedLines = await userService.updateUser({
+			'filters': { user_id },
 			'data': {
 				...data,
 				createdBy: processor?.user_id ?? data.createdBy
 			}
 		})
+
+		if(numOfUpdatedLines[0] !== 1) throw new Error(`No User has been updated.`);
 
 		res.status(200).json({
 			success: true,

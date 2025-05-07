@@ -66,7 +66,7 @@ exports.getPaginatedQuickcode = async({
 }) => {
 	try {
 		let newFilter = formatFilters({
-			model:models.bas_quick_code.rawAttributes,
+			model : models.bas_quick_code.rawAttributes,
 			filters
 		});
 
@@ -79,7 +79,7 @@ exports.getPaginatedQuickcode = async({
 			,order	: [orderBy]
 		})
 		.then(result => {
-			let {count,rows} = JSON.parse(JSON.stringify(result))
+			let { count, rows } = JSON.parse(JSON.stringify(result))
 
 			return {
 				rows,
@@ -97,7 +97,7 @@ exports.getPaginatedQuickcode = async({
 	}
 }
 
-exports.updateRole = async({
+exports.updateQuickcode = async({
 	filters,
 	data,
 	options
@@ -113,6 +113,23 @@ exports.updateRole = async({
 				}
 			}
 		).then(result => JSON.parse(JSON.stringify(result)))
+	}
+	catch(e) {
+		throw e
+	}
+}
+
+exports.getDropdownQuickcode = async({
+	filters
+}) => {
+	try {
+		return await models.bas_quick_code.findAll({
+			where:{
+				...filters
+			},
+			attributes:['qc_id','qc_code', 'qc_description'],
+		})
+		.then(result => JSON.parse(JSON.stringify(result)))
 	}
 	catch(e) {
 		throw e

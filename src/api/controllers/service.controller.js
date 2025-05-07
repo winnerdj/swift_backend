@@ -5,10 +5,10 @@ const { serviceService } = require('../../services/administration');
 
 exports.createService = async(req, res, next) => {
 	try {
-		const { data } = req.body;
+		const data = req.body;
 		const processor = req.processor;
 
-		await userService.createService({
+		await serviceService.createService({
 			...data,
 			createdBy: processor?.user_id ?? data?.createdBy
 		})
@@ -27,21 +27,44 @@ exports.createService = async(req, res, next) => {
 
 exports.updateService = async(req, res, next) => {
 	try {
-		const { data } = req.body;
+		const data = req.body;
+
 		const processor = req.processor;
 
-		await userService.updateService({
-			'filters': { user_id: data?.user_id },
+		const service_id = data?.service_id;
+
+		let numOfUpdatedLines = await serviceService.updateService({
+			'filters': { service_id },
 			'data': {
 				...data,
-				UpdatedBy: processor?.user_id ?? data.createdBy
+				updatedBy: processor?.user_id ?? data.updatedBy
 			}
 		})
+
+		if(numOfUpdatedLines[0] !== 1) throw new Error(`No Service has been updated.`);
 
 		res.status(200).json({
 			success: true,
 			code: '000',
 			message: "Service updated successfully."
+		})
+	}
+	catch(err) {
+		err.statusCode = 500;
+		next(err)
+	}
+}
+
+exports.getPaginatedService = async(req, res, next) => {
+	try {
+		const filters = req.query;
+
+		let { rows, count } = await serviceService.getPaginatedService({ filters })
+
+		let pageCount = Math.ceil(count / filters.pageSize)
+
+		res.status(200).json({
+			rows, count, pageCount
 		})
 	}
 	catch(err) {

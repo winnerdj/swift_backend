@@ -80,14 +80,17 @@ db.bas_user_location.belongsTo(db.bas_quick_code, {
 	as: 'location'
 });
 
-// bas_quick_code -> bas_service (One-to-Many, service_location references qc_id)
-db.bas_quick_code.hasMany(db.bas_service, {
-	foreignKey: 'service_location',
-	as: 'services'
-});
+// bas_service -> bas_quick_code
 db.bas_service.belongsTo(db.bas_quick_code, {
+	targetKey: 'qc_id',
 	foreignKey: 'service_location',
-	as: 'location'
+	as: 'qc_location'
+});
+
+db.bas_service.belongsTo(db.bas_quick_code, {
+	targetKey: 'qc_id',
+	foreignKey: 'service_discipline',
+	as: 'qc_discipline'
 });
 
 // bas_service -> doc_ticket_transaction_log (One-to-Many)

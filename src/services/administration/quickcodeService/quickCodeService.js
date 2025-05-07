@@ -1,6 +1,5 @@
 "use strict";
 
-const bcrypt = require('bcryptjs');
 const dataLayer = require('./dataLayer');
 
 exports.createQuickcode = async({
@@ -25,10 +24,10 @@ exports.getPaginatedQuickcode = async({
 		order = order ? order : 'updatedAt,DESC';
 
 		return await dataLayer.getPaginatedQuickcode({
-			orderBy:order.split(','),
+			orderBy : order.split(','),
 			pageIndex,
 			pageSize,
-			filters:{
+			filters : {
 				...newFilters
 			}
 		})
@@ -43,9 +42,22 @@ exports.updateQuickcode = async({
 	data
 }) => {
 	try {
-		return await dataLayer.updateRole({
+		return await dataLayer.updateQuickcode({
 			filters,
 			data
+		})
+	}
+	catch(e) {
+		throw e
+	}
+}
+
+exports.getDropdownQuickcode = async({
+	filters
+}) => {
+	try {
+		return await dataLayer.getDropdownQuickcode({
+			filters
 		})
 	}
 	catch(e) {

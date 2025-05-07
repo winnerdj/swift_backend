@@ -30,15 +30,17 @@ exports.updateRole = async(req, res, next) => {
 		const data = req.body;
 		const processor = req.processor;
 
-		const role_id = data?.role_name.toLowerCase().replace(/\s+/g, '_')
+		const role_id = data?.role_id;
 
-		await roleService.updateRole({
+		let numOfUpdatedLines = await roleService.updateRole({
 			'filters': { role_id },
 			'data': {
 				...data,
 				updatedBy: processor?.user_id ?? data.updatedBy
 			}
 		})
+
+		if(numOfUpdatedLines[0] !== 1) throw new Error(`No Role has been updated.`);
 
 		res.status(200).json({
 			success: true,

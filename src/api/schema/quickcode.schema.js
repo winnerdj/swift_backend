@@ -44,7 +44,7 @@ const validateCreateQuickcodeSchema = async (req, res, next) => {
 };
 
 const quickcodeUpdateSchema = Joi.object({
-	// qc_id: Joi.string().trim().replace(/\s+/g, '_').max(50).required(), // Define qc_id in the schema
+	qc_id: Joi.string().required(), // Define qc_id in the schema
 	qc_type: Joi.string().trim().max(50).required(),
 	qc_code: Joi.string().trim().max(50).required(),
 	qc_status: Joi.alternatives().try(Joi.boolean(), Joi.number().valid(0, 1), Joi.string().valid),
@@ -74,7 +74,6 @@ const validateUpdateQuickcodeSchema = async(req, res, next) => {
 
 		next();
 	} catch (err) {
-		console.log('xxx',err);
 		err.statusCode = 422;
 		next(err);
 	}

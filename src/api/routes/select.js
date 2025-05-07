@@ -1,7 +1,7 @@
 "use strict";
 
 const router = require('express').Router();
-const { roleService } = require('../../services/administration');
+const { roleService, quickcodeService } = require('../../services/administration');
 
 router.get('/role', async (req, res) => {
 	try {
@@ -16,6 +16,35 @@ router.get('/role', async (req, res) => {
 				return {
 					label: item.role_name,
 					value: item.role_id
+				}
+			})
+		})
+
+	}
+	catch (e) {
+		console.log(e);
+		res.status(500).json({
+			message: `${e}`
+		})
+	}
+})
+
+router.get('/quickcode', async (req, res) => {
+	try {
+		const filters = req.query
+
+		const data = await quickcodeService.getDropdownQuickcode({
+			filters: {
+				qc_status: true,
+				...filters
+			}
+		})
+
+		res.status(200).json({
+			data: data.map(item => {
+				return {
+					value: item.qc_id,
+					label: `${item.qc_code} : ${item.qc_description}`
 				}
 			})
 		})

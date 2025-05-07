@@ -38,6 +38,7 @@ const validateCreateRoleSchema = async (req, res, next) => {
 };
 
 const roleUpdateSchema = Joi.object({
+	role_id: Joi.string().max(50).required(),
 	role_status: Joi.alternatives().try(Joi.boolean(), Joi.number().valid(0, 1), Joi.string().valid),
 	role_name: Joi.string().trim().max(50).required(),
 	role_description: Joi.string().trim().max(255).empty('').default(null),
