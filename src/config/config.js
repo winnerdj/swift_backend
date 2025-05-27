@@ -63,6 +63,28 @@ const redisBullOptions = {
 	// ,maxActiveJobs: 10
 }
 
+const podDbConfig = {
+	host: process.env.DB_POD_HOST,
+	username: process.env.DB_POD_USER,
+	password: process.env.DB_POD_PASSWORD,
+	database: process.env.DB_POD_NAME,
+	dialect: "mssql",
+	charset: 'utf8',
+	pool: {
+		max: 10,
+		min: 1,
+		idle: 2000000,
+		acquire: 2000000
+	},
+	dialectOptions: {
+		//useUTC: false, //for reading from database
+		dateStrings: true,
+		typeCast: true
+	},
+	timezone: '+08:00' /**for writing to database**/
+	,logging: true
+}
+
 const ftpKliConfig = {
 	host		: process.env.FTP_KLI_HOST,
 	username	: process.env.FTP_KLI_USER,
@@ -80,6 +102,7 @@ module.exports = {
 	,jwtExp
 	,jwtErpExp
 	,swiftDbConfig
+	,podDbConfig
 	,axiosDatahubConfig
 	,redisConfig
 	,redisBullOptions

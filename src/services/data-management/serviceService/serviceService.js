@@ -37,6 +37,17 @@ exports.getPaginatedService = async({
 	}
 }
 
+exports.getService = async({
+	filters
+}) => {
+	try {
+		return await dataLayer.getService({ filters })
+	}
+	catch(e) {
+		throw e
+	}
+}
+
 exports.updateService = async({
 	filters,
 	data
@@ -45,6 +56,19 @@ exports.updateService = async({
 		return await dataLayer.updateService({
 			filters,
 			data
+		})
+	}
+	catch(e) {
+		throw e
+	}
+}
+
+exports.getAllServiceByLocation = async({
+	filters
+}) => {
+	try {
+		return await dataLayer.getAllServiceByLocation({
+			filters
 		})
 	}
 	catch(e) {

@@ -1,7 +1,7 @@
 "use strict";
 
 const router = require('express').Router();
-const { quickcodeService } = require('../../services/administration');
+const { quickcodeService } = require('../../services/data-management');
 
 exports.createQuickcode = async(req, res, next) => {
 	try {

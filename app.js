@@ -10,6 +10,7 @@ const morgan = require("./src/middleware/morgan");
 const requestId = require("./src/middleware/requestId");
 const { errorHandler } = require('./src/middleware/errorHandler');
 const { sequelize: swiftSequelize } = require('./src/models/swift');
+const { sequelize: podSequelize } = require('./src/models/pod');
 
 const PORT = config.PORT;
 
@@ -27,6 +28,7 @@ app.use(errorHandler);
 // models.sequelize.sync()
 
 app.listen(PORT, async() => {
-	await swiftSequelize.authenticate().then(() => console.log('swift_db database connection has been established successfully.'));
+	await swiftSequelize.authenticate().then(() => console.log('QMS:swift_db database connection has been established successfully.'));
+	await podSequelize.authenticate().then(() => console.log('POD:heliosDB database connection has been established successfully.'));
 	console.log(`Mesi app is listening on port ${PORT}..`);
 });

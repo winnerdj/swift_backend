@@ -1,0 +1,19 @@
+"use strict";
+
+const router = require('express').Router();
+const { createTicket,
+	// updateTicket,
+	// getPaginatedTicket,
+	// getAllTicketByLocation,
+	getTripDetails } = require('../controllers/ticket.controller');
+const { validateCreateTicketSchema, validateUpdateTicketSchema } = require('../schema/ticket.schema');
+
+const {  } = require('../controllers/ticket.controller');
+
+// router.get('/', getPaginatedTicket);
+router.post('/', validateCreateTicketSchema, createTicket);
+// router.put('/', validateUpdateTicketSchema, updateTicket);
+
+router.get('/trip-no', getTripDetails);
+
+module.exports = router;

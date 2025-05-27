@@ -1,7 +1,8 @@
 "use strict";
 
 const router = require('express').Router();
-const { roleService, quickcodeService } = require('../../services/administration');
+const { roleService  } = require('../../services/administration');
+const { quickcodeService } = require('../../services/data-management');
 
 router.get('/role', async (req, res) => {
 	try {

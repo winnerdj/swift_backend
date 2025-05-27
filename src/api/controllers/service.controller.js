@@ -1,7 +1,7 @@
 "use strict";
 
 const router = require('express').Router();
-const { serviceService } = require('../../services/administration');
+const { serviceService } = require('../../services/data-management');
 
 exports.createService = async(req, res, next) => {
 	try {
@@ -65,6 +65,22 @@ exports.getPaginatedService = async(req, res, next) => {
 
 		res.status(200).json({
 			rows, count, pageCount
+		})
+	}
+	catch(err) {
+		err.statusCode = 500;
+		next(err)
+	}
+}
+
+exports.getAllServiceByLocation = async(req, res, next) => {
+	try {
+		const filters = req.query;
+
+		let { rows, count } = await serviceService.getAllServiceByLocation({ filters })
+
+		res.status(200).json({
+			rows, count
 		})
 	}
 	catch(err) {
