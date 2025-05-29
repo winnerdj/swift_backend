@@ -42,11 +42,11 @@ exports.getPaginatedUser = async({
 }
 
 /**LOGIN SERVICE */
-exports.getUser = async({
+exports.getUserDetails = async({
 	filters
 }) => {
 	try {
-		return await dataLayer.getUser({
+		return await dataLayer.getUserDetails({
 			filters
 		})
 	}

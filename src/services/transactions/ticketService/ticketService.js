@@ -40,3 +40,16 @@ exports.getLatestTicketByService = async({
 		throw e
 	}
 }
+
+exports.getAllTicketByLocation = async({
+	filters
+}) => {
+	try {
+		return await dataLayer.getAllTicketByLocation({
+			filters
+		})
+	}
+	catch(e) {
+		throw e
+	}
+}

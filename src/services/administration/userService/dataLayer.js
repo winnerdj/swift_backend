@@ -82,7 +82,7 @@ exports.getPaginatedUser = async({
 	}
 }
 
-exports.getUser = async({
+exports.getUserDetails = async({
 	filters
 }) => {
 	try {

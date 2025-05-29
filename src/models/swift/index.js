@@ -93,6 +93,12 @@ db.bas_service.belongsTo(db.bas_quick_code, {
 	as: 'qc_discipline'
 });
 
+db.doc_ticket_transaction_log.belongsTo(db.bas_service, {
+	targetKey: 'service_id',
+	foreignKey: 'ticket_service',
+	as: 'ticketService'
+});
+
 // bas_service -> doc_ticket_transaction_log (One-to-Many)
 db.bas_service.hasMany(db.doc_ticket_transaction_log, {
 	foreignKey: 'ticket_service',

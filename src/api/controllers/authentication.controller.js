@@ -30,33 +30,33 @@ exports.loginUser = async(req, res) => {
 	try {
 		const { user_id, user_password } = req.body;
 
-		const getUser = await userService.getUser({
+		const userDetails = await userService.getUserDetails({
 			filters: {
 				user_id
 			}
 		})
 
-		if (!getUser) {
+		if(!userDetails) {
 			return res.status(404).json({
 				message: 'User not found.'
 			})
 		}
 
-		if (!getUser.user_status) {
+		if(!userDetails.user_status) {
 			return res.status(400).json({
 				message: 'User inactive.'
 			})
 		}
 
-		if (!bcrypt.compareSync(user_password, getUser.user_password)) {
+		if(!bcrypt.compareSync(user_password, userDetails.user_password)) {
 			return res.status(400).json({
 				message: 'User password incorrect.'
 			})
 		}
 
 		const token = await authService.generateUserToken({
-			user_id: getUser.user_id,
-			user_name: getUser.user_name
+			user_id: userDetails.user_id,
+			user_name: userDetails.user_name
 		})
 
 		if(!redisClient.isOpen) {
@@ -67,7 +67,8 @@ exports.loginUser = async(req, res) => {
 
 		res.status(200).json({
 			user_id,
-			token
+			token,
+			userDetails
 		})
 	}
 	catch (e) {

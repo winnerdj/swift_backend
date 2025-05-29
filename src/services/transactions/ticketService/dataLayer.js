@@ -95,3 +95,22 @@ exports.createTicket = async({
 		throw e
 	}
 }
+
+exports.getAllTicketByLocation = async({
+	filters
+}) => {
+	try {
+		return await sequelize.query(`
+			CALL sp_getAllTicketByLocation(:serviceLocation)`,
+		{
+			replacements: {
+				serviceLocation: filters?.serviceLocation
+			},
+			type: Sequelize.QueryTypes.SELECT,
+		})
+		.then(result => Object.values(JSON.parse(JSON.stringify(result[0]))))
+	}
+	catch (error) {
+		throw error
+	}
+}

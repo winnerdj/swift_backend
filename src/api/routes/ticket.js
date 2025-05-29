@@ -4,13 +4,14 @@ const router = require('express').Router();
 const { createTicket,
 	// updateTicket,
 	// getPaginatedTicket,
-	// getAllTicketByLocation,
+	getQueueDisplayDetailByLocation,
 	getTripDetails } = require('../controllers/ticket.controller');
 const { validateCreateTicketSchema, validateUpdateTicketSchema } = require('../schema/ticket.schema');
 
-const {  } = require('../controllers/ticket.controller');
 
 // router.get('/', getPaginatedTicket);
+router.get('/queue-display', getQueueDisplayDetailByLocation);
+
 router.post('/', validateCreateTicketSchema, createTicket);
 // router.put('/', validateUpdateTicketSchema, updateTicket);
 

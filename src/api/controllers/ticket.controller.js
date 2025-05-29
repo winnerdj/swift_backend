@@ -98,3 +98,21 @@ exports.getTripDetails = async(req, res, next) => {
 		next(err)
 	}
 }
+
+exports.getQueueDisplayDetailByLocation = async(req, res, next) => {
+	try {
+		const filters = req.query;
+
+		let tickets = await ticketService.getAllTicketByLocation({ filters });
+		// let counters = await ticketService.getCountersByLocation({ filters });
+
+		res.status(200).json({
+			tickets,
+			counters : [ { key: 'value' } ],
+		})
+	}
+	catch(err) {
+		err.statusCode = 500;
+		next(err)
+	}
+}
