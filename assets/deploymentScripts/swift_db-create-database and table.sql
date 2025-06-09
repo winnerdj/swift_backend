@@ -146,8 +146,7 @@ CREATE TABLE IF NOT EXISTS `doc_ticket_transaction_log` (
 	`ticket_id` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_bin',
 	`ticket_service` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_bin',
 
-	`ticket_status` VARCHAR(3) NOT NULL DEFAULT '00' COLLATE 'utf8mb4_bin',
-	`ticket_issue_datetime` DATETIME(6) NOT NULL,
+	`ticket_status` INT() NOT NULL DEFAULT '10' COLLATE 'utf8mb4_bin',
 
 	`ticket_level` TINYINT(1) NOT NULL DEFAULT '1',
     `ticket_parent_reference` VARCHAR(50) NULL COLLATE 'utf8mb4_bin',
@@ -161,7 +160,6 @@ CREATE TABLE IF NOT EXISTS `doc_ticket_transaction_log` (
 	`ticket_assigned_datetime` DATETIME(6) NULL,
 	`ticket_now_serving_datetime` DATETIME(6) NULL,
 	`ticket_served_datetime` DATETIME(6) NULL,
-	`ticket_no_show_datetime` DATETIME(6) NULL,
 	`ticket_cancelled_datetime` DATETIME(6) NULL,
 	`ticket_reason_code` VARCHAR(50) NULL COLLATE 'utf8mb4_bin',
     

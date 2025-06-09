@@ -48,6 +48,17 @@ exports.getService = async({
 	}
 }
 
+exports.getServiceById = async({
+	service_id
+}) => {
+	try {
+		return await dataLayer.getServiceById({ service_id })
+	}
+	catch(e) {
+		throw e
+	}
+}
+
 exports.updateService = async({
 	filters,
 	data
@@ -68,6 +79,19 @@ exports.getAllServiceByLocation = async({
 }) => {
 	try {
 		return await dataLayer.getAllServiceByLocation({
+			filters
+		})
+	}
+	catch(e) {
+		throw e
+	}
+}
+
+exports.getDropdownService = async({
+	filters
+}) => {
+	try {
+		return await dataLayer.getDropdownService({
 			filters
 		})
 	}

@@ -29,14 +29,13 @@ exports.createTicket = async(req, res, next) => {
 			ticket_id						: null,
 			ticket_service					: data.ticket_service,
 			ticket_status					: 10,
-			ticket_issue_datetime			: datetimeNow,
 			ticket_level					: data.ticket_level,
 			ticket_parent_reference			: null,
 			ticket_head_reference			: null,
 			ticket_counter					: null,
 			ticket_support					: null,
 			ticket_create_datetime			: datetimeNow,
-			ticket_queue_datetime			: null,
+			ticket_queue_datetime			: datetimeNow,
 			ticket_assigned_datetime		: null,
 			ticket_now_serving_datetime		: null,
 			ticket_served_datetime			: null,
@@ -109,6 +108,24 @@ exports.getQueueDisplayDetailByLocation = async(req, res, next) => {
 		res.status(200).json({
 			tickets,
 			counters : [ { key: 'value' } ],
+		})
+	}
+	catch(err) {
+		err.statusCode = 500;
+		next(err)
+	}
+}
+
+exports.getPaginatedTicket = async(req, res, next) => {
+	try {
+		const filters = req.query;
+
+		let { rows, count } = await ticketService.getPaginatedTicket({ filters })
+
+		let pageCount = Math.ceil(count / filters.pageSize)
+
+		res.status(200).json({
+			rows, count, pageCount
 		})
 	}
 	catch(err) {

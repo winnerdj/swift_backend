@@ -53,3 +53,25 @@ exports.getAllTicketByLocation = async({
 		throw e
 	}
 }
+
+exports.getPaginatedTicket = async({
+	filters
+}) => {
+	try {
+		let { order, pageIndex, pageSize, ...newFilters } = filters;
+
+		order = order ? order : 'updatedAt,DESC';
+
+		return await dataLayer.getPaginatedTicket({
+			orderBy : order.split(','),
+			pageIndex,
+			pageSize,
+			filters : {
+				...newFilters
+			}
+		})
+	}
+	catch(e) {
+		throw e
+	}
+}

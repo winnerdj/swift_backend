@@ -1,7 +1,7 @@
 "use strict";
 
 const router = require('express').Router();
-const { createService, updateService, getPaginatedService, getAllServiceByLocation } = require('../controllers/service.controller');
+const { createService, updateService, getPaginatedService, getAllServiceByLocation, getAllService } = require('../controllers/service.controller');
 const { validateCreateServiceSchema, validateUpdateServiceSchema } = require('../schema/service.schema');
 
 router.get('/', getPaginatedService);

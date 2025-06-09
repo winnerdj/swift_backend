@@ -4,8 +4,7 @@ module.exports = (sequelize, DataTypes) => {
 	const doc_ticket_transaction_log = sequelize.define('doc_ticket_transaction_log', {
 		ticket_id: { type: DataTypes.STRING(50), primaryKey: true, allowNull: false },
 		ticket_service: { type: DataTypes.STRING(50), allowNull: false },
-		ticket_status: { type: DataTypes.STRING(3), allowNull: false, defaultValue: '00' },
-		ticket_issue_datetime: { type: DataTypes.DATE(6), allowNull: false },
+		ticket_status: { type: DataTypes.INTEGER, allowNull: false, defaultValue: '10' },
 		ticket_level: { type: DataTypes.TINYINT(1), allowNull: false, defaultValue: 1 },
 		ticket_parent_reference: { type: DataTypes.STRING(50), allowNull: true },
 		ticket_head_reference: { type: DataTypes.STRING(50), allowNull: true },

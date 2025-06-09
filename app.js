@@ -24,7 +24,7 @@ app.use(apiRoutes);
 app.use(errorHandler);
 
 /**Load DB here */
-// let models = require('./src/models/mesi')
+// let models = require('./src/models/swift')
 // models.sequelize.sync()
 
 app.listen(PORT, async() => {

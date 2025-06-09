@@ -3,8 +3,7 @@ const Joi = require('joi');
 const ticketCreateSchema = Joi.object({
 	// ticket_id : Joi.string().trim().max(50).required(),
 	ticket_service : Joi.string().trim().max(50).required(),
-	// ticket_status : Joi.string().trim().max(50).required(),
-	// ticket_issue_datetime : Joi.string().trim().max(50).required(),
+	// ticket_status : Joi.number().integer().min(10).max(100).required(),
 	ticket_level : Joi.number().integer().min(1).max(100).default(1),
 	// ticket_parent_reference : Joi.string().trim().max(50).required(),
 	// ticket_head_reference : Joi.string().trim().max(50).required(),
@@ -55,7 +54,7 @@ const ticketUpdateSchema = Joi.object({
 	ticket_id : Joi.string().trim().max(50).required(),
 	ticket_name : Joi.string().trim().max(50).required(),
 	ticket_location : Joi.string().trim().max(50).required(),
-	ticket_status : Joi.alternatives().try(Joi.boolean(), Joi.number().valid(0, 1), Joi.string().valid).default(true),
+	ticket_status : Joi.number().integer().min(10).max(100).required(),
 	ticket_description : Joi.string().trim().max(255).required(),
 	ticket_discipline : Joi.string().trim().max(50).required(),
 	no_of_counters : Joi.number().integer().min(1).max(100).default(1),

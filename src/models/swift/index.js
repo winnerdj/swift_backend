@@ -93,6 +93,20 @@ db.bas_service.belongsTo(db.bas_quick_code, {
 	as: 'qc_discipline'
 });
 
+// doc_ticket_transaction_log -> bas_service
+db.doc_ticket_transaction_log.belongsTo(db.bas_service, {
+	targetKey: 'service_id',
+	foreignKey: 'ticket_service',
+	as: 'srv_ticket_service'
+});
+
+// doc_ticket_transaction_log -> bas_quick_code
+db.doc_ticket_transaction_log.belongsTo(db.bas_quick_code, {
+	targetKey: 'qc_code',
+	foreignKey: 'ticket_status',
+	as: 'qc_ticket_status'
+});
+
 db.doc_ticket_transaction_log.belongsTo(db.bas_service, {
 	targetKey: 'service_id',
 	foreignKey: 'ticket_service',

@@ -1,3 +1,4 @@
 module.exports = {
-	ticketService			: require('./ticketService'),
+	ticketService				: require('./ticketService'),
+	userActivityService			: require('./userActivityService'),
 }
