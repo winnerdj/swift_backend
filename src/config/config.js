@@ -55,13 +55,16 @@ const redisBullOptions = {
 		host: process.env.REDIS_HOST,
 		port: process.env.REDIS_PORT
 	}
-	,prefix: 'mesi:bull'
+	,prefix: 'swift:bull'
 	// ,limiter: { /** Limit queue to max 10 job/s per 1000 milliseconds. */
 	// 	max: 10,
 	// 	duration: 1000
 	// }
 	// ,maxActiveJobs: 10
 }
+
+const assignt_ticket_cron = '10/* * * * *';
+const assignt_ticket_frequency = 15000;
 
 const podDbConfig = {
 	host: process.env.DB_POD_HOST,
@@ -109,4 +112,6 @@ module.exports = {
 	,ftpKliConfig
 	,EMAIL_PASS
 	,EMAIL_USER
+	,assignt_ticket_cron
+	,assignt_ticket_frequency
 }

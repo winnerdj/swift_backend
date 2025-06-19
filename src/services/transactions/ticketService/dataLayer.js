@@ -43,7 +43,6 @@ exports.getLatestTicketByService = async({
 exports.updateTicket = async({
 	filters,
 	data,
-	options
 }) => {
 	try {
 		return await models.doc_ticket_transaction_log.update(
@@ -193,5 +192,114 @@ exports.getPaginatedTicket = async({
 	}
 	catch (error) {
 		throw error
+	}
+}
+
+exports.getLatestTicketByUser = async({
+	...data
+}) => {
+	try {
+		return await models.doc_ticket_transaction_log.findOne({
+			where:{
+				...data
+			},
+			order: [
+				['createdAt', 'DESC']
+			]
+		}).then(result => JSON.parse(JSON.stringify(result)))
+	}
+	catch(e) {
+		throw e
+	}
+}
+
+exports.getLatestActiveAssignedTicketByUser = async({
+	user_id
+}) => {
+
+	try {
+		return await sequelize.query(`
+			SELECT
+				a.*
+			FROM doc_ticket_transaction_log a
+			WHERE 1=1
+				AND a.ticket_support = :userId
+				AND a.ticket_status >= 50
+				AND a.ticket_status NOT IN (60, 90, 100)
+			ORDER BY
+				-- a.ticket_priority 
+				a.ticket_assigned_datetime asc
+			LIMIT 1`,
+		{
+			replacements: {
+				userId: user_id
+			},
+			type: podSequelize.QueryTypes.SELECT,
+		}).then(result => JSON.parse(JSON.stringify(result)))
+	}
+	catch(e) {
+		throw e
+	}
+}
+
+exports.getAllWaitingTickets = async({
+	...data
+}) => {
+	try {
+		return await models.doc_ticket_transaction_log.findAndCountAll({
+			where:{
+				...data
+			},
+			order: [
+				['createdAt', 'DESC']
+			]
+		}).then(result => JSON.parse(JSON.stringify(result)))
+	}
+	catch(e) {
+		throw e
+	}
+}
+
+exports.assignTicketToUser = async({
+	updateTicketData,
+	ticket_id
+}) => {
+	try {
+
+		const [ affectedRows ] = await models.doc_ticket_transaction_log.update(updateTicketData, {
+			where: {
+				ticket_id: ticket_id
+			}
+		})
+
+		return affectedRows;
+	}
+	catch(e) {
+		throw e
+	}
+}
+
+exports.getTodayTicketsByService = async({
+	ticket_service
+}) => {
+	try {
+		return await sequelize.query(`
+			SELECT
+				a.*
+			FROM doc_ticket_transaction_log a
+			WHERE 1=1
+				AND a.ticket_service = :serviceId
+			--	AND DATE(a.ticket_create_datetime) = CURDATE()
+			ORDER BY
+				a.createdAt DESC`,
+		{
+			replacements: {
+				serviceId: ticket_service
+			},
+			type: Sequelize.QueryTypes.SELECT,
+		}).then(result => JSON.parse(JSON.stringify(result)))
+	}
+	catch(e) {
+		throw e
 	}
 }

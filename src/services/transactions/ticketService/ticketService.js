@@ -75,3 +75,85 @@ exports.getPaginatedTicket = async({
 		throw e
 	}
 }
+
+exports.getLatestTicketByUser = async({
+	...data
+}) => {
+	try {
+		return await dataLayer.getLatestTicketByUser({
+			...data
+		})
+	}
+	catch(e) {
+		throw e
+	}
+}
+
+exports.getAllWaitingTickets = async({
+	...data
+}) => {
+	try {
+		return await dataLayer.getAllWaitingTickets({
+			...data
+		})
+	}
+	catch(e) {
+		throw e
+	}
+}
+
+exports.assignTicketToUser = async({
+	updateTicketData,
+	ticket_id
+}) => {
+	try {
+		return await dataLayer.assignTicketToUser({
+			updateTicketData,
+			ticket_id
+		})
+	}
+	catch(e) {
+		throw e
+	}
+}
+
+exports.getLatestActiveAssignedTicketByUser = async({
+	user_id
+}) => {
+	try {
+		return await dataLayer.getLatestActiveAssignedTicketByUser({
+			user_id
+		})
+	}
+	catch(e) {
+		throw e
+	}
+}
+
+exports.getTodayTicketsByService = async({
+	ticket_service
+}) => {
+	try {
+		return await dataLayer.getTodayTicketsByService({
+			ticket_service
+		})
+	}
+	catch(e) {
+		throw e
+	}
+}
+
+exports.updateTicketData = async({
+	updateTicketData,
+	filters
+}) => {
+	try {
+		return await dataLayer.updateTicket({
+			data: updateTicketData,
+			filters
+		})
+	}
+	catch(e) {
+		throw e
+	}
+}

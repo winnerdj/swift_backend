@@ -11,6 +11,7 @@ const requestId = require("./src/middleware/requestId");
 const { errorHandler } = require('./src/middleware/errorHandler');
 const { sequelize: swiftSequelize } = require('./src/models/swift');
 const { sequelize: podSequelize } = require('./src/models/pod');
+const jobs = require("./src/utils/jobs");
 
 const PORT = config.PORT;
 
@@ -22,6 +23,8 @@ app.use(cors({ credentials: true, origin: true }))
 
 app.use(apiRoutes);
 app.use(errorHandler);
+
+jobs();
 
 /**Load DB here */
 // let models = require('./src/models/swift')

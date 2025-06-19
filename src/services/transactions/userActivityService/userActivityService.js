@@ -17,12 +17,21 @@ exports.createUserLog = async({
 }
 
 exports.getLatestActivityByUser = async({
-	filters
+	user_id
 }) => {
 	try {
 		return await dataLayer.getLatestActivityByUser({
-			filters
+			user_id
 		})
+	}
+	catch(e) {
+		throw e
+	}
+}
+
+exports.getAvailableAgents = async() => {
+	try {
+		return await dataLayer.getAvailableAgents()
 	}
 	catch(e) {
 		throw e

@@ -113,6 +113,20 @@ db.doc_ticket_transaction_log.belongsTo(db.bas_service, {
 	as: 'ticketService'
 });
 
+// user_activity_log -> bas_service
+db.user_activity_log.belongsTo(db.bas_service, {
+	targetKey: 'service_id',
+	foreignKey: 'service_id',
+	as: 'srv_user_activity'
+});
+
+// user_activity_log -> bas_quick_code
+db.user_activity_log.belongsTo(db.bas_quick_code, {
+	targetKey: 'qc_id',
+	foreignKey: 'location',
+	as: 'qc_loc_user_activity'
+});
+
 // bas_service -> doc_ticket_transaction_log (One-to-Many)
 db.bas_service.hasMany(db.doc_ticket_transaction_log, {
 	foreignKey: 'ticket_service',
