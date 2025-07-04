@@ -76,6 +76,19 @@ exports.getPaginatedTicket = async({
 	}
 }
 
+exports.getTicket = async({
+	filters
+}) => {
+	try {
+		return await dataLayer.getTicket({
+			filters
+		})
+	}
+	catch(e) {
+		throw e
+	}
+}
+
 exports.getLatestTicketByUser = async({
 	...data
 }) => {

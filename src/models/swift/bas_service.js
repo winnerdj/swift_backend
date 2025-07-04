@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
 		ticket_number_prefix: { type: DataTypes.STRING(50), allowNull: false },
 		recall_waiting_flag: { type: DataTypes.TINYINT(1), allowNull: true, defaultValue: 1 },
 		recall_waiting_time: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 5 },
+		service_modal_ui: { type: DataTypes.STRING(255), allowNull: true, defaultValue: 'default' },
 		service_remarks1: { type: DataTypes.STRING(255), allowNull: true },
 		service_remarks2: { type: DataTypes.STRING(255), allowNull: true },
 		service_remarks3: { type: DataTypes.STRING(255), allowNull: true },

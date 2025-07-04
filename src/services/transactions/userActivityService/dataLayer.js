@@ -93,3 +93,24 @@ exports.getAvailableAgents = async() => {
 		throw e
 	}
 }
+
+exports.updateUserLog = async({
+	filters,
+	data,
+}) => {
+	try {
+		return await models.user_activity_log.update(
+			{
+				...data
+			},
+			{
+				where:{
+					...filters
+				}
+			}
+		).then(result => JSON.parse(JSON.stringify(result)))
+	}
+	catch(e) {
+		throw e
+	}
+}

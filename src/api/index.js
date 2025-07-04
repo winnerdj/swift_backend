@@ -11,7 +11,7 @@ router.use('/role',			validateUserToken,	require('./routes/role.route'));
 router.use('/quickcode',	validateUserToken,	require('./routes/quickcode.route'));
 router.use('/service',		validateUserToken,	require('./routes/service.route'));
 
-router.use('/select',	/*validateUserToken,*/	require('./routes/select.route'));
+router.use('/select',	validateUserToken,	require('./routes/select.route'));
 
 router.use('/ticket',	/*validateUserToken,*/	require('./routes/ticket.route'));
 

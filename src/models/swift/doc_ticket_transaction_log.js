@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
 		ticket_remarks1: { type: DataTypes.STRING(255), allowNull: true },
 		ticket_remarks2: { type: DataTypes.STRING(255), allowNull: true },
 		ticket_remarks3: { type: DataTypes.STRING(255), allowNull: true },
+		ticket_override: { type: DataTypes.TINYINT(1), allowNull: false, defaultValue: 0 },
 		createdBy: { type: DataTypes.STRING(255), allowNull: true },
 		updatedBy: { type: DataTypes.STRING(255), allowNull: true },
 	}, {

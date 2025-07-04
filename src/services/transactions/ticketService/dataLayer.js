@@ -216,7 +216,6 @@ exports.getLatestTicketByUser = async({
 exports.getLatestActiveAssignedTicketByUser = async({
 	user_id
 }) => {
-
 	try {
 		return await sequelize.query(`
 			SELECT
@@ -227,8 +226,9 @@ exports.getLatestActiveAssignedTicketByUser = async({
 				AND a.ticket_status >= 50
 				AND a.ticket_status NOT IN (60, 90, 100)
 			ORDER BY
-				-- a.ticket_priority 
-				a.ticket_assigned_datetime asc
+				-- a.ticket_priority
+				a.ticket_override ASC,
+				a.ticket_assigned_datetime ASC
 			LIMIT 1`,
 		{
 			replacements: {

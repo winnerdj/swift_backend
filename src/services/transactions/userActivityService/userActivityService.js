@@ -37,3 +37,18 @@ exports.getAvailableAgents = async() => {
 		throw e
 	}
 }
+
+exports.updateUserLog =async({
+	filters,
+	data
+}) => {
+	try {
+		return await dataLayer.updateUserLog({
+			filters,
+			data
+		})
+	}
+	catch(e) {
+		throw e
+	}
+}
