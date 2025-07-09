@@ -52,3 +52,25 @@ exports.updateUserLog =async({
 		throw e
 	}
 }
+
+exports.getPaginatedUserActivity = async({
+	filters
+}) => {
+	try {
+		let { order, pageIndex, pageSize, ...newFilters } = filters;
+
+		order = order ? order : 'updatedAt,DESC';
+
+		return await dataLayer.getPaginatedUserActivity({
+			orderBy : order.split(','),
+			pageIndex,
+			pageSize,
+			filters : {
+				...newFilters
+			}
+		})
+	}
+	catch(e) {
+		throw e
+	}
+}

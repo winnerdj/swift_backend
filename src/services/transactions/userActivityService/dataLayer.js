@@ -49,8 +49,8 @@ exports.getLatestActivityByUser = async({
 
 			let mappedRow = {
 				...jsonRow,
-				location_desc: jsonRow.qc_loc_user_activity ? jsonRow.qc_loc_user_activity.qc_description : null,
-				service_name: jsonRow.srv_user_activity ? jsonRow.srv_user_activity.service_name : null
+				location_desc: jsonRow?.qc_loc_user_activity ? jsonRow.qc_loc_user_activity.qc_description : null,
+				service_name: jsonRow?.srv_user_activity ? jsonRow.srv_user_activity.service_name : null
 			}
 
 			return mappedRow
@@ -112,5 +112,76 @@ exports.updateUserLog = async({
 	}
 	catch(e) {
 		throw e
+	}
+}
+
+const formatFilters = ({ model, filters }) => {
+	try {
+		let formattedFilters = {};
+
+		if(filters.searchTerm && filters.searchTerm !== "") {
+			let headers = Object.keys(model).filter(
+				(h) => !["createdAt", "updatedAt"].includes(h)
+			);
+
+			// Properly format Op.or conditions
+			formattedFilters = {
+				[Sequelize.Op.or]: headers.map((field) => ({
+					[field]: { [Sequelize.Op.like]: `%${filters.searchTerm}%` },
+				})),
+			};
+		} else {
+			delete filters.searchTerm;
+			formattedFilters = filters;
+		}
+
+		return formattedFilters;
+	} catch (e) {
+		throw e;
+	}
+}
+
+exports.getPaginatedUserActivity = async({
+	filters,
+	orderBy,
+	pageIndex,
+	pageSize
+}) => {
+	try {
+		let newFilter = formatFilters({
+			model : models.user_activity_log.rawAttributes,
+			filters
+		});
+
+		const { count, rows } = await models.user_activity_log.findAndCountAll({
+			where:{
+				...newFilter
+			}
+			,offset	: parseInt(pageIndex) * parseInt(pageSize)
+			,limit	: parseInt(pageSize)
+			,order	: [orderBy] 
+			,include: [
+				{
+					model: models.bas_service,
+					foreignKey: 'service_id',
+					as: 'srv_user_activity'
+				},
+			]
+		}).then(result => {
+			let { count, rows } = JSON.parse(JSON.stringify(result))
+
+			return {
+				rows,
+				count
+			}
+		})
+
+		return {
+			count,
+			rows
+		}
+	}
+	catch (error) {
+		throw error
 	}
 }
