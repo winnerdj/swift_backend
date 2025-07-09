@@ -8,6 +8,7 @@ const {
 	getLatestActivityByUser,
 	getLatestActiveAssignedTicketByUser,
 	getTodayTicketsByService,
+	getTodayActiveCountersByService,
 	updateTicket,
 	overrideTicket,
 	cancelTicket,
@@ -16,22 +17,23 @@ const {
 
 const router = require('express').Router();
 
-router.get('/available-counter',				getAvailableCounter);
-router.get('/latest-user-activity',				getLatestActivityByUser);
+router.get('/available-counter',						getAvailableCounter);
+router.get('/latest-user-activity',						getLatestActivityByUser);
 
-router.post('/login',							workLogin);
-router.post('/logout',							workLogout);
-router.post('/breaktime',						workBreaktime);
+router.post('/login',									workLogin);
+router.post('/logout',									workLogout);
+router.post('/breaktime',								workBreaktime);
 
-router.get('/active-assigned-ticket',			getLatestActiveAssignedTicketByUser);
-router.get('/all-tickets-today-by-service',		getTodayTicketsByService);
+router.get('/active-assigned-ticket',					getLatestActiveAssignedTicketByUser);
+router.get('/all-tickets-today-by-service',				getTodayTicketsByService);
+router.get('/all-active-counters-today-by-service',		getTodayActiveCountersByService);
 
-router.post('/start-serving',					updateTicket);
-router.post('/end-serving',						updateTicket);
-router.post('/no-show',							updateTicket);
+router.post('/start-serving',							updateTicket);
+router.post('/end-serving',								updateTicket);
+router.post('/no-show',									updateTicket);
 
-router.post('/override-ticket',					overrideTicket);
-router.post('/cancel-ticket',					cancelTicket);
-router.post('/transfer-ticket',					transferTicket);
+router.post('/override-ticket',							overrideTicket);
+router.post('/cancel-ticket',							cancelTicket);
+router.post('/transfer-ticket',							transferTicket);
 
 module.exports = router;

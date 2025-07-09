@@ -340,6 +340,33 @@ exports.getTodayTicketsByService = async (req, res) => {
 	}
 }
 
+exports.getTodayActiveCountersByService = async (req, res) => {
+	try {
+		const filters = req.query
+
+		/** Get Active counters */
+		if(!redisClient.isOpen) {
+			await redisClient.connect()
+		}
+
+		let redisResponse = await redisClient.json.get(`swift:counter:${filters.service_id}`)
+		let activeCounters = [];
+		if(redisResponse !== null || redisResponse) {
+			activeCounters = JSON.parse(redisResponse)
+		}
+
+		res.status(200).json({
+			data: activeCounters
+		})
+	}
+	catch (e) {
+		console.log(e);
+		res.status(500).json({
+			message: `${e}`
+		})
+	}
+}
+
 exports.updateTicket = async(req, res, next) => {
 	try {
 		const data = req.body;
