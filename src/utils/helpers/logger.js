@@ -39,7 +39,7 @@ exports.logger = createLogger({
 	level: level(),
 	levels,
 	format: format.combine(
-		format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
+		format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
 		format.colorize({ all: true }),
 		format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
 	),
@@ -66,7 +66,7 @@ exports.loggerBull = createLogger({
 	level: level(),
 	levels,
 	format: format.combine(
-		format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
+		format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
 		format.colorize({ all: true }),
 		format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
 	),

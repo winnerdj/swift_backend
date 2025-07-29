@@ -1,7 +1,7 @@
 "use strict";
 
 const { userService } = require('../../services/administration');
-const { generateTempPassword, sendEmailTempPassword } = require('../../utils/helpers/helper');
+const { generateTempPassword, emailNewAccount } = require('../../utils/helpers/helper');
 
 exports.createUser = async(req, res, next) => {
 	try {
@@ -15,8 +15,9 @@ exports.createUser = async(req, res, next) => {
 			createdBy: processor?.user_id ?? data?.createdBy
 		})
 
-		await sendEmailTempPassword({
+		await emailNewAccount({
 			email_address : data.user_email,
+			user_id : data.user_id,
 			tempPassword : data.password
 		})
 

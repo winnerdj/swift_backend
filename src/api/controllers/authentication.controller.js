@@ -7,6 +7,7 @@ const Redis = require('redis');
 
 const { userService, authService } = require('../../services/administration');
 const { redisConfig } = require('../../config/config');
+const { generateTempPassword, emailTemporaryPassword } = require('../../utils/helpers/helper');
 
 const redisClient = Redis.createClient({
 	...redisConfig
@@ -117,5 +118,47 @@ exports.changePassword = async(req, res, next) => {
 	catch(err) {
 		err.statusCode = 500;
 		next(err)
+	}
+}
+
+exports.forgotPassword = async(req, res, next) => {
+	try {
+		const { user_email } = req.body;
+
+		const user = await userService.getUser({
+			filters: { user_email }
+		})
+
+		if(!user) throw new Error('User not found.');
+
+		let user_password = await generateTempPassword();
+
+		let updatedUser = await userService.updateUser({
+			filters:{
+				user_email
+			},
+			data : {
+				user_password,
+				user_new: 1
+			}
+		})
+
+		console.log("🚀 ------------------------------------------------------------------------------------------------🚀");
+		console.log("🚀 ~ authentication.controller.js:146 ~ exports.forgotPassword=async ~ updatedUser:", updatedUser);
+		console.log("🚀 ------------------------------------------------------------------------------------------------🚀");
+
+		if(!updatedUser) {
+			return await emailTemporaryPassword({
+				email_address: user.user_email,
+				useer_id: user.user_id,
+				tempPassword: user_password
+			})
+		}
+		else {
+			throw new Error('User password not updated.');
+		}
+	}
+	catch(e) {
+		throw e
 	}
 }
