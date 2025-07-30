@@ -6,7 +6,7 @@ const { UniqueConstraintError, ValidationError } = require('sequelize');
 
 const errorHandler = async(err, req, res, next) => {
 	let errStatus = err.statusCode || 500;
-	let errMsg = 'Unhandled error. Please contact the administrator.';
+	let errMsg = err?.message || 'Unhandled error. Please contact the administrator.';
 
 	if(err instanceof UniqueConstraintError) { // Use the imported class name
 		errMsg = 'A unique constraint was violated.';
