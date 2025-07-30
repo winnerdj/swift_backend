@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 		user_role: { type: DataTypes.STRING(50), allowNull: false },
 		user_password: { type: DataTypes.STRING(255), allowNull: false },
 		user_status: { type: DataTypes.BOOLEAN, defaultValue: 1 },
+		user_is_reset: { type: DataTypes.BOOLEAN, defaultValue: 1 },
 		user_email: { type: DataTypes.STRING(255), unique: true },
 		user_location : { type: DataTypes.STRING(255), allowNull: true },
 		user_name: { type: DataTypes.STRING(255) },

@@ -153,7 +153,7 @@ exports.forgotPassword = async(req, res, next) => {
 			},
 			data : {
 				user_new_password,
-				user_new: 1
+				user_is_reset: 1
 			}
 		})
 
