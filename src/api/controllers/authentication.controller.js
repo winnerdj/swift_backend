@@ -90,13 +90,13 @@ exports.changePassword = async(req, res, next) => {
 			}
 		})
 
-		if (!getUser) {
+		if(!getUser) {
 			return res.status(400).json({
 				message: 'User not found'
 			})
 		}
 
-		if (!getUser.user_status) {
+		if(!getUser.user_status) {
 			return res.status(400).json({
 				message: 'User inactive'
 			})
@@ -131,34 +131,44 @@ exports.forgotPassword = async(req, res, next) => {
 	try {
 		const { user_email } = req.body;
 
-		const user = await userService.getUser({
+		if(!user_email) {
+			return res.status(400).json({
+				success: false,
+				message: 'Email address is required.',
+				updatedRows: 0
+			})
+		}
+
+		const user = await userService.getUserDetails({
 			filters: { user_email }
 		})
 
 		if(!user) throw new Error('User not found.');
 
-		let user_password = await generateTempPassword();
+		let user_new_password = await generateTempPassword();
 
 		let updatedUser = await userService.updateUser({
 			filters:{
-				user_email
+				user_id : user.user_id
 			},
 			data : {
-				user_password,
+				user_new_password,
 				user_new: 1
 			}
 		})
 
-		console.log("🚀 ------------------------------------------------------------------------------------------------🚀");
-		console.log("🚀 ~ authentication.controller.js:146 ~ exports.forgotPassword=async ~ updatedUser:", updatedUser);
-		console.log("🚀 ------------------------------------------------------------------------------------------------🚀");
-
-		if(!updatedUser) {
-			return await emailTemporaryPassword({
+		if(updatedUser[0] >= 1) {
+			await emailTemporaryPassword({
 				email_address: user.user_email,
-				useer_id: user.user_id,
-				tempPassword: user_password
+				user_id: user.user_id,
+				tempPassword: user_new_password
 			})
+
+			res.status(200).json({
+				success: true,
+				updatedRows: updatedUser[0],
+				message: 'Temporary password sent to your email address.'
+			});
 		}
 		else {
 			throw new Error('User password not updated.');
