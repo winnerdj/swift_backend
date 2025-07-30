@@ -82,9 +82,9 @@ exports.loginUser = async(req, res) => {
 
 exports.changePassword = async(req, res, next) => {
 	try {
-		const { user_id, user_old_password, user_new_password } = req.body?.data;
+		const { user_id, current_password, new_password } = req.body;
 
-		const getUser = await userService.getUser({
+		const getUser = await userService.getUserDetails({
 			filters: {
 				user_id
 			}
@@ -102,18 +102,24 @@ exports.changePassword = async(req, res, next) => {
 			})
 		}
 
-		if (!bcrypt.compareSync(user_old_password, getUser.user_password)) {
+		if(!bcrypt.compareSync(current_password, getUser.user_password)) {
 			return res.status(400).json({
 				message: 'Old password is incorrect'
 			})
 		}
 
-		await userService.updateUser({
+		let updatedUser = await userService.updateUser({
 			filters: { user_id },
-			data: { user_new_password }
+			data: {
+				user_new_password : new_password 
+			}
 		})
 
-		res.status(200).end()
+		if(!updatedUser) {
+			throw new Error('User password not updated.')
+		}
+
+		res.status(200).json({ updatedRow : updatedUser[0] })
 	}
 	catch(err) {
 		err.statusCode = 500;

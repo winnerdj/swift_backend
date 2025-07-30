@@ -2,11 +2,15 @@ const router = require('express').Router();
 const Joi = require('joi');
 
 const schema = Joi.object({
-	user_new_password: Joi.string()
+	user_id: Joi.string()
+		.required(),
+	current_password: Joi.string()
+		.required(),
+	new_password: Joi.string()
 		.strict()
-		.pattern(/^[a-zA-Z0-9\w-_!@.]+$/, { name : '"Alphanumeric and special characters: @!_-."'})
-		.min(10)
-		.max(30)
+		.pattern(/^[a-zA-Z0-9\w!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]+$/, { name : '"Alphanumeric and special characters: @!_-."'})
+		.min(5)
+		.max(100)
 		.required(),
 
 }).options({ allowUnknown : true })
