@@ -156,6 +156,19 @@ exports.getTodayTicketsByService = async({
 	}
 }
 
+exports.getTodayUserActivityByService = async({
+	service_id
+}) => {
+	try {
+		return await dataLayer.getTodayUserActivityByService({
+			service_id
+		})
+	}
+	catch(e) {
+		throw e
+	}
+}
+
 exports.updateTicketData = async({
 	updateTicketData,
 	filters

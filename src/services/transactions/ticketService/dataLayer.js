@@ -289,12 +289,37 @@ exports.getTodayTicketsByService = async({
 			FROM doc_ticket_transaction_log a
 			WHERE 1=1
 				AND a.ticket_service = :serviceId
-			--	AND DATE(a.ticket_create_datetime) = CURDATE()
+				AND DATE(a.ticket_create_datetime) = CURDATE()
 			ORDER BY
-				a.createdAt DESC`,
+				a.updatedAt DESC`,
 		{
 			replacements: {
 				serviceId: ticket_service
+			},
+			type: Sequelize.QueryTypes.SELECT,
+		}).then(result => JSON.parse(JSON.stringify(result)))
+	}
+	catch(e) {
+		throw e
+	}
+}
+
+exports.getTodayUserActivityByService = async({
+	service_id
+}) => {
+	try {
+		return await sequelize.query(`
+			SELECT
+				a.*
+			FROM user_activity_log a
+			WHERE 1=1
+				AND a.service_id = :serviceId
+				AND DATE(a.updatedAt) = CURDATE()
+			ORDER BY
+				a.updatedAt DESC`,
+		{
+			replacements: {
+				serviceId: service_id
 			},
 			type: Sequelize.QueryTypes.SELECT,
 		}).then(result => JSON.parse(JSON.stringify(result)))

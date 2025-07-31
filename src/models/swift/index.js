@@ -8,10 +8,10 @@ const { swiftDbConfig } = require('../../config/config');
 
 const sequelize = new Sequelize({
 	...swiftDbConfig,
-	// logging: false
-	logging: function(str) {
-		console.log(`QMS:swift_db: MySQL ${moment().format('YY-MM-DD_HH:mm:ss.SSS')}: ${str}`);
-	}
+	logging: false
+	// logging: function(str) {
+	// 	console.log(`QMS:swift_db: MySQL ${moment().format('YY-MM-DD_HH:mm:ss.SSS')}: ${str}`);
+	// }
 });
 
 let db = {};

@@ -9,6 +9,7 @@ const {
 	getLatestActiveAssignedTicketByUser,
 	getTodayTicketsByService,
 	getTodayActiveCountersByService,
+	getTodayUserActivityByService,
 	updateTicket,
 	overrideTicket,
 	cancelTicket,
@@ -27,6 +28,7 @@ router.post('/breaktime',								workBreaktime);
 router.get('/active-assigned-ticket',					getLatestActiveAssignedTicketByUser);
 router.get('/all-tickets-today-by-service',				getTodayTicketsByService);
 router.get('/all-active-counters-today-by-service',		getTodayActiveCountersByService);
+router.get('/all-user-activity-today-by-service',		getTodayUserActivityByService);
 
 router.post('/start-serving',							updateTicket);
 router.post('/end-serving',								updateTicket);

@@ -367,6 +367,27 @@ exports.getTodayActiveCountersByService = async (req, res) => {
 	}
 }
 
+exports.getTodayUserActivityByService = async (req, res) => {
+	try {
+		const filters = req.query
+
+		/** Get Service details */
+		const result = await ticketService.getTodayUserActivityByService({
+			service_id : filters.service_id
+		})
+
+		res.status(200).json({
+			data: result
+		})
+	}
+	catch (e) {
+		console.log(e);
+		res.status(500).json({
+			message: `${e}`
+		})
+	}
+}
+
 exports.updateTicket = async(req, res, next) => {
 	try {
 		const data = req.body;
